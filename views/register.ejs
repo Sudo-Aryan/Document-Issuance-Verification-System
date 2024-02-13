@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="style.css">
+
+<head>
+    <title>Issuer Registration</title>
+</head>
+
+<body>
+    <h1>Register Issuer</h1>
+    <form class="w-full" action="/user/register" method="POST">
+        <label for="useraddress">User Address:</label>
+        <input type="text" id="useraddress" name="useraddress"><br><br>
+        <label for="InstituteName">Institute Name:</label>
+        <input type="text" id="InstituteName" name="InstituteName"><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br><br>
+        <label for="Password">Password:</label>
+        <input type="password" id="Password" name="password"><br><br>
+        <input type="radio" name="role" id="issuer" value="ISSUER_ROLE">
+        <label for="issuer">Issuer</label> <br>
+        <input type="radio" name="role" id="verifier" value="VERIFIER_ROLE">
+        <label for="verifier">Verifier</label> <br>
+        <button type="submit" onclick="myClick()">Register</button>
+    </form>
+    <span>Already have an account ? <a href="/login" class="text-blue-500">Log In</a></span>
+</body>
+<script>
+    function myClick(){
+        console.log("Submitted form")
+    }
+</script>
+</html>
