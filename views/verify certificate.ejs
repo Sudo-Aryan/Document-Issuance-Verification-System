@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verify</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1><%= verifier.username %></h1>
-    <p>
-        <%= d %>
-    </p>
-</body>
+    <form
+      action="/verifier/verifyCertificate"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <input
+        hidden
+        type="text"
+        name="verifierName"
+        value="<%= verifier.username %>"
+      />
+      <input hidden type="text" name="useraddress" value="<%= verifier.useraddress %>" />
+      <input type="file" name="doc" value="doc" />
+      <button type="submit">Verify</button>
+    </form>
+    <p><%= doc %></p>
+  </body>
 </html>

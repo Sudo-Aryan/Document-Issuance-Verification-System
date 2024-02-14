@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@chainlink/contracts": "^0.8.0",
     "@openzeppelin/contracts": "^5.0.1",
     "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",

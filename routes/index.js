@@ -21,9 +21,10 @@ const [key] = Object.entries(artifact.networks)[0];
 // Deployed Contract Address
 const { address } = artifact.networks[key];
 
+const { log, error } = require('console');
+
 // // Load the Certification contract Instance
 const contract = new web3.eth.Contract(abi, address);
-
 
 // GET Register and Login
 router.get("/", function (req, res) {
@@ -40,18 +41,10 @@ router.get("/login", function (req, res) {
 
 // POST Register and Login
 
-router.post("/user/register", async (req, res) => {
+router.post("/user/register", (req, res) => {
   try {
     const Acc_address = req.body.useraddress;
     const role = req.body.role;
-    await contract.methods
-      .createUser(
-        role,
-        req.body.InstituteName,
-        req.body.email,
-        req.body.password
-      )
-      .send({ from: Acc_address, gas: 8000000 });
 
     const userData = new userModel({
       useraddress: Acc_address,
@@ -63,9 +56,16 @@ router.post("/user/register", async (req, res) => {
 
     userModel
       .register(userData, req.body.password)
-      .then((document) => {
-        console.log("Hii1");
-        console.log(document);
+      .then(async (document) => {
+        await contract.methods
+          .createUser(
+            role,
+            req.body.InstituteName,
+            req.body.email,
+            req.body.password
+          )
+          .send({ from: Acc_address, gas: 8000000 });
+
         req.login(document, (err) => {
           if (err) {
             console.error("Login error:", err);
@@ -207,11 +207,10 @@ router.post(
           document.course_name
         )
         .send({ from: req.body.useraddress, gas: 8000000 });
-      const { events } = response;
-      const { CertificateGenerated } = events;
-      const { returnValues, transactionHash } = CertificateGenerated;
-      console.log(returnValues);
-      if (returnValues[0]) {
+
+      const { status, transactionHash } = response;
+      console.log(response);
+      if (status === BigInt(1)) {
         document.transactionHashId = transactionHash;
 
         const millisec = Date.now();
@@ -233,7 +232,7 @@ router.post(
       }
       res.redirect(`/issuer/profile/${req.body.OrgName}`);
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
       res.send({ message: err.message });
     }
   }

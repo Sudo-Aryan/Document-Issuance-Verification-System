@@ -2,6 +2,7 @@
 pragma solidity 0.8.21;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@chainlink/contracts/src/v0.8/Chainlink.sol";
 
 contract Certification {
     using Strings for string;
@@ -89,9 +90,14 @@ contract Certification {
         bytes32 hash = stringToByteConversion(_doc_hash);
 
         require(hash.length > 0, "Error: Document hash cannot be empty!!!");
-        require(!certificates[hash].auth, "Error: Certificate already exists.");
+        require(
+            !Strings.equal(certificates[hash].doc_Hash, _doc_hash),
+            "Error: Certificate with the same hash already exists!"
+        );
 
-        string memory doc_Id = string(abi.encodePacked(_doc_hash, user_address));
+        string memory doc_Id = string(
+            abi.encodePacked(_doc_hash, user_address)
+        );
 
         emit CertificateGenerated(true, block.timestamp);
         certificates[hash] = Certificate(
